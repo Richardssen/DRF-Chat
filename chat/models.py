@@ -14,15 +14,15 @@ class UserProfile(models.Model):
         return self.user.username
     
     def last_seen(self):
-        return cache.get('last_seen_%s' % self.user.username)
+        return cache.get(f'last_seen_{self.user.username}')
     
     def online(self):
         if self.last_seen():
             now = datetime.datetime.now()
-            if now > (self.last_seen() + datetime.timedelta(seconds=settings.USER_ONLINE_TIMEOUT)):
-                return False
-            else:
-                return True
+            return now <= self.last_seen() + datetime.timedelta(
+                seconds=settings.USER_ONLINE_TIMEOUT
+            )
+
         else: 
             return False
 

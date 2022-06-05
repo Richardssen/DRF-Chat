@@ -30,10 +30,7 @@ def user_list(request, pk=None):
     List all required messages, or create a new message.
     """
     if request.method == 'GET':
-        if pk:
-            users = User.objects.filter(id=pk)
-        else:
-            users = User.objects.all()
+        users = User.objects.filter(id=pk) if pk else User.objects.all()
         serializer = UserSerializer(users, many=True, context={'request': request})
         return JsonResponse(serializer.data, safe=False)
 
